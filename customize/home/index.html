@@ -7,11 +7,29 @@
 <script src="apps.js"></script>
 </head>
 <body>
+  <div id="glow"></div>
   <header>
-    <h1 id="title">Home</h1>
-    <div id="clock"></div>
+    <div class="when">
+      <div id="greeting"></div>
+      <div class="timeline">
+        <div id="time"></div><div id="ampm"></div>
+        <div class="divider"></div>
+        <div id="date"></div>
+      </div>
+    </div>
+    <nav id="pills">
+      <button class="pill" data-action="inputs">
+        <svg viewBox="0 0 24 24"><path d="M8 2h8v6l-2 3v3h-4v-3L8 8z" fill="currentColor"/><rect x="10.5" y="15" width="3" height="6" rx="1" fill="currentColor"/></svg>Inputs
+      </button>
+      <button class="pill" data-action="wifi">
+        <svg viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0l-2 2a12 12 0 0 0-16 0zm4 4a9 9 0 0 1 12 0l-2 2a6 6 0 0 0-8 0zm4 4a3 3 0 0 1 4 0l-2 2z" fill="currentColor"/></svg>Wi-Fi
+      </button>
+      <button class="pill" data-action="settings">
+        <svg viewBox="0 0 24 24"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.4-2.5 1a7 7 0 0 0-1.7-1L15 3h-4l-.3 2.6a7 7 0 0 0-1.7 1l-2.5-1-2 3.4L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.4 2.5-1a7 7 0 0 0 1.7 1L11 21h4l.3-2.6a7 7 0 0 0 1.7-1l2.5 1 2-3.4zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" fill="currentColor" transform="translate(-1 0)"/></svg>Settings
+      </button>
+    </nav>
   </header>
-  <main id="grid" role="grid"></main>
+  <section id="dock"><div id="track"></div></section>
   <script src="app.js"></script>
 </body>
 </html>

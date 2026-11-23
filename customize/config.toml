@@ -39,19 +39,20 @@ icon = "gameconsole"
 launch_app = ""
 message = "Your TV settings have been applied"
 
-# Clean home screen app: only your installed apps, on a solid background.
+# Clean home screen app: clock, Inputs / Wi-Fi / Settings buttons and a
+# glass dock with only your installed apps.
 # Build and install it with:  python3 tv_customize.py home
 # (needs Developer Mode, see ../youtube/install-youtube-adfree.sh steps 1-3)
 [home]
-title = "Home"
-background = "#101418"       # solid background colour
+background = "#0b0b0d"       # solid background colour
+background_glow = "#3a0d10"  # soft glow behind the clock; "" for pure solid
 text_color = "#ffffff"
-accent = "#4f8cff"           # highlight around the selected app
-columns = 6
-show_clock = true
+accent = "#ffffff"           # outline on the selected app / button
+clock_24h = false            # false = 4:49 PM, true = 16:49
+show_greeting = true         # "GOOD AFTERNOON" above the clock
 include_system_apps = false  # true = also show LG's built-in apps
-# Built-in items to keep even when include_system_apps = false
-# (run "python3 tv_customize.py apps" to see every ID):
-always_show = ["com.webos.app.hdmi1", "com.palm.app.settings"]
+# Built-in items to add to the dock even when include_system_apps = false
+# (run "python3 tv_customize.py apps" to see every ID), e.g. "com.webos.app.hdmi1"
+always_show = []
 hide = []                    # app IDs to leave out
-order = []                   # app IDs to put first, in this order
+order = ["youtube.leanback.v4", "netflix", "amazon"]   # these come first

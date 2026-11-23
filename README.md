@@ -9,7 +9,7 @@ breaking any app or signing out of your existing accounts**.
 | [`adblock/`](adblock/README.md) | Blocks ad and tracking servers for every app, using AdGuard Home, Pi-hole, NextDNS or your router | A device on your Wi-Fi |
 | [`youtube/`](youtube/install-youtube-adfree.sh) | Installs YouTube AdFree, an ad-free YouTube app you sign into with your existing Google account | A computer, once |
 | [`customize/`](customize/tv_customize.py) | Applies your picture, sound, input names and start-up app from one profile file | A computer on your Wi-Fi |
-| [`customize/home/`](customize/home/) | **Clean Home**: an app showing only your installed apps on a solid background, no ads or rows | Installed on the TV |
+| [`customize/home/`](customize/home/) | **Clean Home**: big clock and greeting, Inputs / Wi-Fi / Settings buttons, and a glass dock with only your installed apps | Installed on the TV |
 
 ## Quick start
 
