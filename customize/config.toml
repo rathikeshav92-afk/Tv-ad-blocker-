@@ -56,3 +56,12 @@ include_system_apps = false  # true = also show LG's built-in apps
 always_show = []
 hide = []                    # app IDs to leave out
 order = ["youtube.leanback.v4", "netflix", "amazon"]   # these come first
+card_style = "colour"        # "colour" = gradient cards, "white" = plain white cards
+
+# Your own card colours, by app name or ID. One colour, or two for a gradient.
+# Popular apps (YouTube, Netflix, Prime Video, JioHotstar, Spotify, SonyLIV,
+# ZEE5, Disney+...) already get their brand colours; every other app gets
+# its own colour automatically.
+[home.colors]
+# "YouTube" = "#ff0000"
+# "My App"  = "#ff7a18, #af002d"

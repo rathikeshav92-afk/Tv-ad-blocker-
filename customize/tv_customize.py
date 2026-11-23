@@ -156,7 +156,8 @@ async def build_home(client, cfg, build_only):
                     "icon": fetch_icon(a, src), "bgColor": a.get("bgColor", "")}
                    for a in apps]
         theme = {k: home[k] for k in ("background", "background_glow", "text_color",
-                                       "accent", "clock_24h", "show_greeting") if k in home}
+                                       "accent", "clock_24h", "show_greeting", "card_style", "colors")
+                 if k in home}
         (src / "apps.js").write_text(
             "window.HOME_CONFIG = " + json.dumps({"apps": entries, "theme": theme},
                                                  indent=1) + ";\n")

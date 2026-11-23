@@ -28,23 +28,54 @@
     settings: function () { launch("com.palm.app.settings"); }
   };
 
-  // ---- dock cards -----------------------------------------------------
-  function isLight(hex) {
-    var m = /^#?([0-9a-f]{6})/i.exec(hex || "");
-    if (!m) return true;
-    var n = parseInt(m[1], 16);
-    return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) > 150;
+  // ---- dock card colours ----------------------------------------------
+  // Brand gradients for well-known apps, matched on the app name.
+  var BRANDS = [
+    [/youtube/i, "#ff4e45", "#b5000b"],
+    [/netflix/i, "#e50914", "#3d0003"],
+    [/prime|amazon/i, "#22c4ff", "#0a5fd1"],
+    [/hotstar|jio/i, "#1f6bff", "#e33bb8"],
+    [/spotify/i, "#1ed760", "#0a6b30"],
+    [/sony ?liv/i, "#ffb000", "#e2470a"],
+    [/zee ?5/i, "#a64dff", "#4c1599"],
+    [/disney/i, "#2f5bff", "#071552"],
+    [/apple/i, "#4a4a4f", "#111113"],
+    [/mx ?player/i, "#2ea8ff", "#0047b3"],
+    [/wynk|gaana|music/i, "#ff5f6d", "#ffc371"],
+    [/hdmi|input/i, "#6b7383", "#262a33"],
+    [/settings/i, "#7a8191", "#2c3038"],
+    [/browser|web/i, "#2dd4bf", "#0f766e"]
+  ];
+  var custom = t.colors || {};
+  function gradientFor(app) {
+    var c = custom[app.id] || custom[app.title];
+    if (c) {
+      var parts = String(c).split(",");
+      return [parts[0].trim(), (parts[1] || parts[0]).trim()];
+    }
+    for (var i = 0; i < BRANDS.length; i++) {
+      if (BRANDS[i][0].test(app.title) || BRANDS[i][0].test(app.id)) return [BRANDS[i][1], BRANDS[i][2]];
+    }
+    // Any other app: a colour of its own, picked from its name.
+    var h = 0;
+    for (var j = 0; j < app.title.length; j++) h = (h * 31 + app.title.charCodeAt(j)) % 360;
+    return ["hsl(" + h + ",80%,58%)", "hsl(" + ((h + 35) % 360) + ",75%,32%)"];
   }
+
   var track = document.getElementById("track");
   var cards = cfg.apps.map(function (app, i) {
     var card = document.createElement("div");
     card.className = "card";
-    var bg = app.bgColor || "#ffffff";
-    card.style.background = bg;
+    if (t.card_style === "white") {
+      card.style.background = "#ffffff";
+      card.classList.add("plain");
+    } else {
+      var g = gradientFor(app);
+      card.style.background = "linear-gradient(135deg, " + g[0] + ", " + g[1] + ")";
+    }
     function label() {
       var s = document.createElement("span");
       s.textContent = app.title;
-      s.style.color = isLight(bg) ? "#111" : "#fff";
       card.appendChild(s);
     }
     if (app.icon) {
