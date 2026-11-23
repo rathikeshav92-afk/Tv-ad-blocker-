@@ -1,2 +1,0 @@
-bscpylgtv==0.5.5
-pillow>=10
