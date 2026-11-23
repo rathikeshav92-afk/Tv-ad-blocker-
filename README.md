@@ -9,6 +9,7 @@ breaking any app or signing out of your existing accounts**.
 | [`adblock/`](adblock/README.md) | Blocks ad and tracking servers for every app, using AdGuard Home, Pi-hole, NextDNS or your router | A device on your Wi-Fi |
 | [`youtube/`](youtube/install-youtube-adfree.sh) | Installs YouTube AdFree, an ad-free YouTube app you sign into with your existing Google account | A computer, once |
 | [`customize/`](customize/tv_customize.py) | Applies your picture, sound, input names and start-up app from one profile file | A computer on your Wi-Fi |
+| [`customize/home/`](customize/home/) | **Clean Home**: an app showing only your installed apps on a solid background, no ads or rows | Installed on the TV |
 
 ## Quick start
 
@@ -23,7 +24,22 @@ breaking any app or signing out of your existing accounts**.
    cd customize && pip install -r requirements.txt
    python3 tv_customize.py pair     # accept the prompt on the TV once
    python3 tv_customize.py apply
+   python3 tv_customize.py home     # build + install Clean Home (needs Developer Mode)
    ```
+
+## Clean Home
+
+`python3 tv_customize.py home` reads the app list from your TV, keeps
+only the apps you installed (plus anything in `always_show`, such as
+HDMI 1 and Settings) and installs a home app with your colours from the
+`[home]` section of `config.toml`. Use the arrows and OK to open an app;
+it also works with the Magic Remote pointer. Run the command again after
+you install or remove apps.
+
+LG doesn't allow any app to replace the built-in home screen, so the
+**Home button still opens LG's launcher**. Pin Clean Home to the first
+spot in LG's app bar (press and hold it, then move it) so it's one click
+away, and turn off LG's promotions with the settings guide.
 
 ## Why these files don't run *on* the TV
 
