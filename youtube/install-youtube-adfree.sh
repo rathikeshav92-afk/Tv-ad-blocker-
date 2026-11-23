@@ -48,6 +48,8 @@ curl -fL -o "$WORK/youtube-adfree.ipk" "$URL"
 echo ">> Installing on the TV..."
 ares-install --device "$DEVICE" "$WORK/youtube-adfree.ipk"
 
+TOKEN="$(ares-novacom --device "$DEVICE" --run "cat /var/luna/preferences/devmode_enabled" 2>/dev/null | tr -d '[:space:]' || true)"
+
 cat <<'DONE'
 
 Done. "YouTube AdFree" is now in your TV's app list.
@@ -61,3 +63,10 @@ IMPORTANT: Developer Mode has a countdown timer (shown in the app). When it
 runs out, dev apps are removed. Open Developer Mode and press "Extend" before
 it runs out (or install the Homebrew Channel, which can keep it alive).
 DONE
+if [ -n "$TOKEN" ]; then
+  echo
+  echo "Developer Mode token (keep it private): $TOKEN"
+  echo "Add it as the GitHub secret LG_DEVMODE_TOKEN to renew Developer Mode"
+  echo "automatically every day (see .github/workflows/keep-devmode-on.yml)."
+fi
+echo "Security: you can now turn Key Server OFF in the Developer Mode app."

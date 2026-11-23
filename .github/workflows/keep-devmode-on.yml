@@ -1,0 +1,34 @@
+# Keeps the LG TV's Developer Mode from expiring, so YouTube AdFree is never
+# removed. Runs on GitHub's servers every day: your PC and TV can be off.
+#
+# Setup (once): add the token printed by youtube/install-youtube-adfree.ps1
+# as a repository secret named LG_DEVMODE_TOKEN
+# (repo > Settings > Secrets and variables > Actions).
+name: Keep LG Developer Mode on
+
+on:
+  schedule:
+    - cron: "17 3 * * *"   # every day at 03:17 UTC (08:47 IST)
+  workflow_dispatch:        # "Run workflow" button for a manual renewal
+
+permissions: {}
+
+jobs:
+  extend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extend the Developer Mode session
+        env:
+          TOKEN: ${{ secrets.LG_DEVMODE_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::warning::LG_DEVMODE_TOKEN secret is not set; nothing to renew."
+            exit 0
+          fi
+          base="https://developer.lge.com/secure"
+          echo "Renewing..."
+          curl -fsS --retry 3 "$base/ResetDevModeSession.dev?sessionToken=$TOKEN"
+          echo
+          echo "Session now:"
+          curl -fsS --retry 3 "$base/CheckDevModeSession.dev?sessionToken=$TOKEN"
+          echo

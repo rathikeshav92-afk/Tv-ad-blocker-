@@ -23,7 +23,22 @@ Spotify and LG's own store are never blocked.
   channel apps. A few free apps refuse to play without them. If one
   breaks, switch back to standard.
 
-## Option A: AdGuard Home (recommended)
+## Option 0: Always on, no device needed (easiest)
+
+Uses the free public **AdGuard DNS** service, so ad blocking keeps
+working when your PC is off. On the TV, set these as the DNS servers
+(see "Point the TV at the blocker" below):
+
+- Primary: `94.140.14.14`
+- Secondary: `94.140.15.15`
+
+It blocks 40 of the 52 domains in our standard list and none of the
+app or login domains we protect, so apps and sign-ins keep working. It
+doesn't block LG's home-screen ad server (`ngfts.lge.com`); turning off
+**Home Promotion** in the TV's settings covers that. To block the full
+list as well, use Option A on a Raspberry Pi that stays on.
+
+## Option A: AdGuard Home (full list, needs an always-on device)
 
 1. On a computer or Raspberry Pi that stays on, run
    `docker compose up -d` in this folder.

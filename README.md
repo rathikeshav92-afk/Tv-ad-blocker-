@@ -13,10 +13,28 @@ your existing accounts**.
 
 1. **Settings:** follow [docs/turn-off-lg-ads-in-settings.md](docs/turn-off-lg-ads-in-settings.md).
 2. **Ad blocking:** follow [adblock/README.md](adblock/README.md), then set the TV's DNS to the blocker.
-3. **YouTube without ads:**
-   ```bash
-   ./youtube/install-youtube-adfree.sh 192.168.1.50
+3. **YouTube without ads.** Windows (PowerShell):
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File youtube\install-youtube-adfree.ps1 -TvIp 192.168.1.50
    ```
+   Mac/Linux: `./youtube/install-youtube-adfree.sh 192.168.1.50`
+4. **Keep it running by itself.** Add the token the installer prints as
+   the GitHub secret `LG_DEVMODE_TOKEN` (repo → Settings → Secrets and
+   variables → Actions). GitHub then renews Developer Mode every day, so
+   YouTube AdFree is never removed.
+
+## Works with your PC and TV switched off
+
+| Part | Where it runs |
+|---|---|
+| Settings changes | Saved in the TV |
+| Ad blocking (Option 0) | AdGuard DNS's servers |
+| YouTube AdFree | Installed on the TV |
+| Developer Mode renewal | GitHub's servers, daily ([workflow](.github/workflows/keep-devmode-on.yml)) |
+
+Your PC is only needed once, to install YouTube AdFree. GitHub pauses
+scheduled workflows after 60 days with no changes to the repo; it emails
+you, and one click on **Enable workflow** turns it back on.
 
 ## Why these files don't run *on* the TV
 
