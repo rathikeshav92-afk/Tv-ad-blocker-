@@ -39,8 +39,8 @@ icon = "gameconsole"
 launch_app = ""
 message = "Your TV settings have been applied"
 
-# Clean home screen app: clock, Inputs / Wi-Fi / Settings buttons and a
-# glass dock with only your installed apps.
+# Clean home screen app: clock, Inputs / Wi-Fi / Settings buttons and a 4x4
+# grid with only your installed apps (scrolls if you have more than 16).
 # Build and install it with:  python3 tv_customize.py home
 # (needs Developer Mode, see ../youtube/install-youtube-adfree.sh steps 1-3)
 [home]
@@ -56,12 +56,9 @@ include_system_apps = false  # true = also show LG's built-in apps
 always_show = []
 hide = []                    # app IDs to leave out
 order = ["youtube.leanback.v4", "netflix", "amazon"]   # these come first
-card_style = "colour"        # "colour" = gradient cards, "white" = plain white cards
 
-# Your own card colours, by app name or ID. One colour, or two for a gradient.
-# Popular apps (YouTube, Netflix, Prime Video, JioHotstar, Spotify, SonyLIV,
-# ZEE5, Disney+...) already get their brand colours; every other app gets
-# its own colour automatically.
+# Each app card uses the colour of the app's own icon. To change one,
+# give its name or ID a colour here:
 [home.colors]
 # "YouTube" = "#ff0000"
 # "My App"  = "#ff7a18, #af002d"

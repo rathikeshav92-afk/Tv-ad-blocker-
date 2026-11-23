@@ -28,50 +28,40 @@
     settings: function () { launch("com.palm.app.settings"); }
   };
 
-  // ---- dock card colours ----------------------------------------------
-  // Brand gradients for well-known apps, matched on the app name.
-  var BRANDS = [
-    [/youtube/i, "#ff4e45", "#b5000b"],
-    [/netflix/i, "#e50914", "#3d0003"],
-    [/prime|amazon/i, "#22c4ff", "#0a5fd1"],
-    [/hotstar|jio/i, "#1f6bff", "#e33bb8"],
-    [/spotify/i, "#1ed760", "#0a6b30"],
-    [/sony ?liv/i, "#ffb000", "#e2470a"],
-    [/zee ?5/i, "#a64dff", "#4c1599"],
-    [/disney/i, "#2f5bff", "#071552"],
-    [/apple/i, "#4a4a4f", "#111113"],
-    [/mx ?player/i, "#2ea8ff", "#0047b3"],
-    [/wynk|gaana|music/i, "#ff5f6d", "#ffc371"],
-    [/hdmi|input/i, "#6b7383", "#262a33"],
-    [/settings/i, "#7a8191", "#2c3038"],
-    [/browser|web/i, "#2dd4bf", "#0f766e"]
-  ];
+  // ---- app grid (4 x 4, scrolls by row) -----------------------------
+  var COLS = 4, ROWS = 4;
   var custom = t.colors || {};
-  function gradientFor(app) {
-    var c = custom[app.id] || custom[app.title];
-    if (c) {
-      var parts = String(c).split(",");
-      return [parts[0].trim(), (parts[1] || parts[0]).trim()];
-    }
-    for (var i = 0; i < BRANDS.length; i++) {
-      if (BRANDS[i][0].test(app.title) || BRANDS[i][0].test(app.id)) return [BRANDS[i][1], BRANDS[i][2]];
-    }
-    // Any other app: a colour of its own, picked from its name.
-    var h = 0;
-    for (var j = 0; j < app.title.length; j++) h = (h * 31 + app.title.charCodeAt(j)) % 360;
-    return ["hsl(" + h + ",80%,58%)", "hsl(" + ((h + 35) % 360) + ",75%,32%)"];
+
+  // Card colour: your override, else the icon's own colour (read when the
+  // app was built), else read it from the icon here, else dark glass.
+  function sampleIcon(img) {
+    try {
+      var c = document.createElement("canvas");
+      c.width = c.height = 16;
+      var ctx = c.getContext("2d");
+      ctx.drawImage(img, 0, 0, 16, 16);
+      var d = ctx.getImageData(0, 0, 16, 16).data, r = 0, g = 0, b = 0, n = 0;
+      for (var i = 0; i < 16; i++) {
+        [[i, 0], [i, 15], [0, i], [15, i]].forEach(function (p) {
+          var k = (p[1] * 16 + p[0]) * 4;
+          if (d[k + 3] > 128) { r += d[k]; g += d[k + 1]; b += d[k + 2]; n++; }
+        });
+      }
+      return n > 32 ? "rgb(" + (r / n | 0) + "," + (g / n | 0) + "," + (b / n | 0) + ")" : "";
+    } catch (e) { return ""; }   // icon not readable (different origin)
   }
 
   var track = document.getElementById("track");
   var cards = cfg.apps.map(function (app, i) {
     var card = document.createElement("div");
     card.className = "card";
-    if (t.card_style === "white") {
-      card.style.background = "#ffffff";
-      card.classList.add("plain");
-    } else {
-      var g = gradientFor(app);
-      card.style.background = "linear-gradient(135deg, " + g[0] + ", " + g[1] + ")";
+    var over = custom[app.id] || custom[app.title];
+    if (over) {
+      var parts = String(over).split(",");
+      card.style.background = parts.length > 1
+        ? "linear-gradient(135deg," + parts[0] + "," + parts[1] + ")" : parts[0];
+    } else if (app.colour) {
+      card.style.background = app.colour;
     }
     function label() {
       var s = document.createElement("span");
@@ -82,6 +72,12 @@
       var img = document.createElement("img");
       img.src = app.icon;
       img.alt = app.title;
+      img.onload = function () {
+        if (!over && !app.colour) {
+          var c = sampleIcon(img);
+          if (c) card.style.background = c;
+        }
+      };
       img.onerror = function () { img.remove(); label(); };
       card.appendChild(img);
     } else {
@@ -99,7 +95,7 @@
     p.onclick = function () { ACTIONS[p.dataset.action](); };
     p.onmouseenter = function () { setFocus("pills", i); };
   });
-  var zone = cards.length ? "dock" : "pills", idx = { dock: 0, pills: 0 };
+  var zone = cards.length ? "dock" : "pills", idx = { dock: 0, pills: 0 }, topRow = 0;
 
   function setFocus(z, i) {
     var list = z === "dock" ? cards : pills;
@@ -109,11 +105,12 @@
     cards.concat(pills).forEach(function (el) { el.classList.remove("focus"); });
     list[idx[z]].classList.add("focus");
     if (z === "dock") {
-      // keep the focused card inside the dock
-      var card = cards[idx.dock], dock = document.getElementById("dock");
-      var visible = dock.clientWidth - 52, x = card.offsetLeft + card.offsetWidth;
-      var shift = Math.max(0, Math.min(x - visible + 20, track.scrollWidth - visible));
-      track.style.transform = "translateX(" + (-shift) + "px)";
+      // keep the focused row on screen (scrolls one row at a time)
+      var row = Math.floor(idx.dock / COLS), rows = Math.ceil(cards.length / COLS);
+      topRow = Math.min(Math.max(topRow, row - ROWS + 1), row);
+      topRow = Math.max(0, Math.min(topRow, rows - ROWS));
+      var step = cards[0].offsetHeight + parseFloat(getComputedStyle(track).rowGap || 0);
+      track.style.transform = "translateY(" + (-topRow * step) + "px)";
     }
   }
 
@@ -121,8 +118,15 @@
     switch (e.keyCode) {
       case 37: setFocus(zone, idx[zone] - 1); break;   // left
       case 39: setFocus(zone, idx[zone] + 1); break;   // right
-      case 38: setFocus("pills", idx.pills); break;    // up
-      case 40: setFocus("dock", idx.dock); break;      // down
+      case 38:                                         // up
+        if (zone === "dock" && idx.dock >= COLS) setFocus("dock", idx.dock - COLS);
+        else setFocus("pills", idx.pills);
+        break;
+      case 40:                                         // down
+        if (zone === "pills") setFocus("dock", idx.dock);
+        else if (idx.dock + COLS < cards.length) setFocus("dock", idx.dock + COLS);
+        else if (Math.floor(idx.dock / COLS) < Math.floor((cards.length - 1) / COLS)) setFocus("dock", cards.length - 1);
+        break;
       case 13:                                         // OK
         if (zone === "dock" && cfg.apps[idx.dock]) launch(cfg.apps[idx.dock].id);
         if (zone === "pills") pills[idx.pills].click();

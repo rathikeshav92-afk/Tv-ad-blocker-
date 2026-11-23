@@ -125,6 +125,35 @@ def pick_apps(apps, home):
                                          a.get("title", "").lower()))
 
 
+def icon_colour(path):
+    """The icon's own background colour, read from its edge pixels.
+
+    For a logo on a transparent background, returns white or near-black,
+    whichever the logo stands out on. Returns '' if it can't be read.
+    """
+    try:
+        from PIL import Image
+        img = Image.open(path).convert("RGBA").resize((32, 32))
+    except Exception:  # noqa: BLE001 - Pillow missing or unreadable image
+        return ""
+    px = img.load()
+    edge = [px[x, y] for x in range(32) for y in range(32)
+            if x in (0, 31) or y in (0, 31)]
+    if sum(p[3] for p in edge) / len(edge) < 128:
+        solid = [p for row in range(32) for p in (px[x, row] for x in range(32)) if p[3] > 128]
+        if not solid:
+            return ""
+        lum = sum(0.299 * r + 0.587 * g + 0.114 * b for r, g, b, _ in solid) / len(solid)
+        return "#1c1c1e" if lum > 170 else "#ffffff"
+    # Most common edge colour (rounded so anti-aliasing doesn't split it)
+    groups = {}
+    for r, g, b, a in edge:
+        if a > 128:
+            groups.setdefault((r // 24, g // 24, b // 24), []).append((r, g, b))
+    best = max(groups.values(), key=len)
+    return "#%02x%02x%02x" % tuple(sum(c[i] for c in best) // len(best) for i in range(3))
+
+
 def fetch_icon(app, out_dir):
     """Copy the app's icon into the package. Returns a relative path or ''."""
     url = app.get("largeIcon") or app.get("icon") or ""
@@ -152,11 +181,14 @@ async def build_home(client, cfg, build_only):
         src = Path(tmp) / "cleanhome"
         shutil.copytree(HERE / "home", src)
         (src / "icons").mkdir()
-        entries = [{"id": a["id"], "title": a.get("title", a["id"]),
-                    "icon": fetch_icon(a, src), "bgColor": a.get("bgColor", "")}
-                   for a in apps]
+        entries = []
+        for a in apps:
+            icon = fetch_icon(a, src)
+            colour = icon_colour(src / icon) if icon and not icon.startswith("file:") else ""
+            entries.append({"id": a["id"], "title": a.get("title", a["id"]), "icon": icon,
+                            "colour": colour or a.get("bgColor", "")})
         theme = {k: home[k] for k in ("background", "background_glow", "text_color",
-                                       "accent", "clock_24h", "show_greeting", "card_style", "colors")
+                                       "accent", "clock_24h", "show_greeting", "colors")
                  if k in home}
         (src / "apps.js").write_text(
             "window.HOME_CONFIG = " + json.dumps({"apps": entries, "theme": theme},
