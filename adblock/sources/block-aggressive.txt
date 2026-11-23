@@ -1,0 +1,14 @@
+# Aggressive tier: also stops pre-roll ads in many FREE streaming apps
+# (LG Channels, Pluto, Plex free channels, Tubi, some news apps).
+# WARNING: some free apps refuse to play a video when their ad server
+# is unreachable. If an app shows a black screen or spinner, remove the
+# matching line below (or allowlist it) and rebuild.
+
+imasdk.googleapis.com
+fwmrm.net
+mssl.fwmrm.net
+2mdn.net
+serving-sys.com
+springserve.com
+adaptv.advertising.com
+advertising.com

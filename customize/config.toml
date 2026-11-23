@@ -1,0 +1,40 @@
+# Your LG TV customisation profile.
+# Edit the values, then run:  python3 tv_customize.py apply
+# Delete or comment out (#) any line you don't want changed.
+
+[tv]
+ip = "192.168.1.50"          # TV: Settings > General > Network > (Wi-Fi) > Advanced
+
+[picture]
+# Picture mode. Common values: vivid, normal (Standard), eco, cinema,
+# sports, game, filmMaker, expert1, expert2.
+pictureMode = "cinema"
+backlight = 80               # 0-100 ("OLED Pixel Brightness" on OLEDs)
+contrast = 85                # 0-100
+brightness = 50              # 0-100
+color = 55                   # 0-100
+sharpness = 10               # 0-50
+energySaving = "off"         # off, auto, min, med, max
+
+[sound]
+output = "tv_speaker"        # tv_speaker, external_arc, bt_soundbar, headphone
+volume = 15                  # 0-100
+
+# Rename HDMI inputs and give them icons on the home screen.
+# Icons: satellite, settopbox, dvd, bluray, hometheater, gameconsole,
+#        streamingbox, camera, mobile, pc
+[[inputs]]
+id = "HDMI_1"
+label = "Set-Top Box"
+icon = "settopbox"
+
+[[inputs]]
+id = "HDMI_2"
+label = "Game Console"
+icon = "gameconsole"
+
+[startup]
+# App to open after applying (run "python3 tv_customize.py apps" for IDs).
+# e.g. "youtube.leanback.v4", "netflix", "amazon", "com.webos.app.hdmi1"
+launch_app = ""
+message = "Your TV settings have been applied"

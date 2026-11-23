@@ -1,0 +1,20 @@
+# AdGuard Home: a DNS ad blocker for your whole home network.
+# Run on any always-on device on the SAME Wi-Fi as the TV
+# (Raspberry Pi, old laptop, home server).
+#
+#   docker compose up -d
+#   then open http://<this-device-ip>:3000 to finish setup.
+#
+services:
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: adguardhome
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "3000:3000/tcp"   # first-run setup wizard
+      - "8080:80/tcp"     # dashboard after setup
+    volumes:
+      - ./adguard/work:/opt/adguardhome/work
+      - ./adguard/conf:/opt/adguardhome/conf

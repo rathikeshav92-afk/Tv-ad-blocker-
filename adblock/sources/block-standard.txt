@@ -1,0 +1,61 @@
+# LG webOS ads, home-screen banners, tracking and ACR (Live Plus).
+# Safe tier: blocking these does not break apps, logins or playback.
+# One domain per line. Subdomains are blocked too.
+
+# --- LG home-screen / launcher ads ---
+ad.lgappstv.com
+lgad.cjpowercast.com
+ngfts.lge.com
+aic-ngfts.lge.com
+lgsmartad.com
+ad.lgsmartad.com
+info.lgsmartad.com
+us.ad.lgsmartad.com
+eu.ad.lgsmartad.com
+us.info.lgsmartad.com
+eu.info.lgsmartad.com
+yumenetworks.com
+smartclip.net
+smartclip.com
+
+# --- ACR / viewing-habit tracking (Live Plus) ---
+alphonso.tv
+tv.alphonso.tv
+api.alphonso.tv
+
+# --- Generic ad exchanges and trackers used inside TV apps ---
+doubleclick.net
+googlesyndication.com
+googleadservices.com
+pagead2.googlesyndication.com
+adservice.google.com
+app-measurement.com
+amazon-adsystem.com
+adnxs.com
+adsrvr.org
+pubmatic.com
+rubiconproject.com
+openx.net
+casalemedia.com
+criteo.com
+criteo.net
+taboola.com
+outbrain.com
+moatads.com
+scorecardresearch.com
+innovid.com
+tremorhub.com
+spotxchange.com
+spotx.tv
+teads.tv
+adcolony.com
+unityads.unity3d.com
+applovin.com
+inmobi.com
+vungle.com
+chartboost.com
+mopub.com
+flurry.com
+branch.io
+appsflyer.com
+adjust.com

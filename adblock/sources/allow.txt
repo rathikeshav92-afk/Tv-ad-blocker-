@@ -1,0 +1,58 @@
+# NEVER blocked, even if a blocklist contains them.
+# These keep apps, existing accounts/logins ("old IDs"), the LG Content
+# Store and firmware updates working.
+
+# --- LG system, account, store, updates ---
+lgappstv.com
+lgtvsdp.com
+lgtvcommon.com
+lgeapi.com
+snu.lge.com
+lgaccount.com
+lgthinq.com
+lge.com
+
+# --- Google / YouTube (sign-in and video) ---
+accounts.google.com
+oauth2.googleapis.com
+www.googleapis.com
+youtubei.googleapis.com
+youtube.com
+www.youtube.com
+m.youtube.com
+googlevideo.com
+ytimg.com
+i.ytimg.com
+gstatic.com
+
+# --- Netflix ---
+netflix.com
+netflix.net
+nflxvideo.net
+nflximg.net
+nflxso.net
+nflxext.com
+
+# --- Amazon Prime Video ---
+amazon.com
+api.amazon.com
+primevideo.com
+media-amazon.com
+aiv-cdn.net
+aiv-delivery.net
+
+# --- Disney+ / JioHotstar ---
+disneyplus.com
+bamgrid.com
+dssott.com
+hotstar.com
+jiocinema.com
+
+# --- Other popular apps ---
+sonyliv.com
+zee5.com
+spotify.com
+scdn.co
+spotifycdn.com
+apple.com
+tv.apple.com
